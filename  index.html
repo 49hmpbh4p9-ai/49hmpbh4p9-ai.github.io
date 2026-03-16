@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Pulse — Intelligence Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --ink-2: #3a3a3a;
+    --ink-3: #6b6b6b;
+    --ink-4: #9a9a9a;
+    --paper: #faf9f7;
+    --paper-2: #f2f0ec;
+    --paper-3: #e8e4de;
+    --rule: #dedad4;
+    --accent: #c0392b;
+    --accent-2: #e74c3c;
+    --amber: #d4800a;
+    --green: #2d6a4f;
+    --blue: #1a3a5c;
+    --blue-light: #e8f0f8;
+    --red-light: #fdf0ef;
+    --amber-light: #fdf5e6;
+    --green-light: #edf5f0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0 40px;
+    border-bottom: 3px solid var(--accent);
+  }
+  .masthead-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0 14px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+  }
+  .masthead-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .masthead-title span {
+    color: var(--accent-2);
+  }
+  .masthead-tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+  .masthead-meta {
+    text-align: right;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+  .masthead-meta strong {
+    display: block;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  /* ── BREAKING BANNER ── */
+  .breaking-banner {
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 40px;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .breaking-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .breaking-tag {
+    background: #fff;
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 10px;
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+  .breaking-text {
+    font-weight: 300;
+  }
+  .breaking-text strong { font-weight: 500; }
+
+  /* ── NAV TABS ── */
+  .nav-strip {
+    background: var(--ink);
+    padding: 0 40px;
+    border-bottom: 1px solid #222;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+  }
+  .nav-tab {
+    padding: 12px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: rgba(255,255,255,0.8); }
+  .nav-tab.active {
+    color: #fff;
+    border-bottom-color: var(--accent-2);
+  }
+
+  /* ── LAYOUT ── */
+  .page-content { display: none; }
+  .page-content.active { display: block; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 40px;
+  }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ── ARTICLE ── */
+  .article-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .article-kicker {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article-kicker::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .article-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .article-subhead {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .article-byline {
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .byline-sep { color: var(--rule); }
+
+  /* correction box */
+  .correction-box {
+    background: var(--red-light);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    border-radius: 0 4px 4px 0;
+  }
+  .correction-box .correction-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .correction-box p {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* body text */
+  .article-body p {
+    margin-bottom: 18px;
+    color: var(--ink-2);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .article-body p:first-child::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    float: left;
+    line-height: 0.85;
+    margin-right: 6px;
+    margin-top: 6px;
+    color: var(--ink);
+  }
+  .article-body h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 36px 0 14px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .article-body h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 28px 0 10px;
+  }
+
+  /* pull quote */
+  .pull-quote {
+    margin: 28px 0;
+    padding: 20px 24px;
+    border-left: 3px solid var(--accent);
+    background: var(--paper-2);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 !important;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-top: 8px;
+  }
+
+  /* ── INFOGRAPHIC CARDS ── */
+  .infographic {
+    margin: 28px 0;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .infographic-header {
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 18px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .infographic-header .stamp {
+    font-size: 9px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+  }
+  .infographic-body { background: var(--paper); padding: 20px 18px; }
+
+  /* intel divide grid */
+  .intel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .intel-card {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 14px 16px;
+    background: #fff;
+  }
+  .intel-card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .badge-blue { background: #deeaf8; color: #0c447c; }
+  .badge-red  { background: #fde8e8; color: #791f1f; }
+  .intel-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .intel-card p {
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .intel-card-facts {
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+  }
+  .intel-card-facts .fact-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 5px;
+  }
+  .intel-card-facts li {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    margin-bottom: 3px;
+    padding-left: 12px;
+    position: relative;
+    list-style: none;
+  }
+  .intel-card-facts li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--ink-4);
+  }
+  .transit-stat {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .transit-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    min-width: 80px;
+    padding-top: 2px;
+  }
+  .transit-value strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .transit-value span {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+
+  /* risk dashboard */
+  .risk-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-badge {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    min-width: 64px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .risk-high   { background: #fde8e8; color: #7a1f1f; }
+  .risk-medium { background: #fdf0dc; color: #634010; }
+  .risk-low    { background: #eaf3e8; color: #2d5a27; }
+  .risk-info h4 { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .risk-info p  { font-size: 12px; color: var(--ink-3); line-height: 1.5; margin: 0; }
+  .risk-indicator {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--ink-4);
+    white-space: nowrap;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* phase timeline */
+  .phase-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .phase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .phase-num-1 { background: #fde8e8; color: #791f1f; border: 1px solid #f09595; }
+  .phase-num-2 { background: #fdf0dc; color: #633806; border: 1px solid #fac775; }
+  .phase-num-3 { background: #eaf3e0; color: #27500a; border: 1px solid #c0dd97; }
+  .phase-card {
+    flex: 1;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px 16px;
+    background: #fff;
+  }
+  .phase-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .phase-card-header h4 { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .phase-tag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .phase-tag-1 { background: #fde8e8; color: #791f1f; }
+  .phase-tag-2 { background: #fdf0dc; color: #633806; }
+  .phase-tag-3 { background: #eaf3e0; color: #27500a; }
+  .phase-items li {
+    font-size: 12px;
+    color: var(--ink-3);
+    padding: 3px 0 3px 12px;
+    border-left: 2px solid var(--rule);
+    margin-bottom: 3px;
+    list-style: none;
+  }
+  .phase-items-1 li { border-left-color: #f09595; }
+  .phase-items-2 li { border-left-color: #fac775; }
+  .phase-items-3 li { border-left-color: #c0dd97; }
+
+  /* claim status table */
+  .claim-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+  .claim-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+  .claim-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .claim-table tr:last-child td { border-bottom: none; }
+  .status-confirmed { color: #2d6a4f; font-weight: 500; }
+  .status-pending   { color: var(--amber); font-weight: 500; }
+  .status-contested { color: var(--accent); font-weight: 500; }
+  .claim-table a { color: var(--blue); text-decoration: none; font-size: 11px; }
+  .claim-table a:hover { text-decoration: underline; }
+
+  /* sources list */
+  .sources-list { padding: 0; margin-top: 8px; }
+  .sources-list li {
+    list-style: none;
+    font-size: 12px;
+    color: var(--ink-3);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .sources-list li:last-child { border-bottom: none; }
+  .sources-list a { color: var(--blue); text-decoration: none; }
+  .sources-list a:hover { text-decoration: underline; }
+  .source-num {
+    font-size: 10px;
+    color: var(--ink-4);
+    min-width: 18px;
+    padding-top: 1px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { position: sticky; top: 20px; }
+
+  .sidebar-widget {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .sidebar-widget-header {
+    background: var(--ink);
+    color: #fff;
+    padding: 9px 14px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .sidebar-widget-body { padding: 14px; background: #fff; }
+
+  .sidebar-risk-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+  }
+  .sidebar-risk-item:last-child { border-bottom: none; }
+  .sidebar-risk-label { flex: 1; color: var(--ink-2); }
+  .sidebar-risk-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-high { background: #c0392b; }
+  .dot-medium { background: #d4800a; }
+  .dot-low { background: #2d6a4f; }
+
+  .watchlist-item {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+    color: var(--ink-2);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+  .watchlist-item:last-child { border-bottom: none; }
+  .watch-bullet {
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 14px;
+    margin-top: -1px;
+  }
+
+  /* ── MARKETS TAB ── */
+  .markets-header {
+    padding: 32px 40px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--rule);
+  }
+  .markets-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .markets-header p {
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+  .markets-header .live-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2d6a4f;
+    margin-right: 5px;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1} 50%{opacity:.3}
+  }
+
+  .markets-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 40px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 0;
+  }
+  .market-card {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 14px 14px 12px;
+    background: #fff;
+  }
+  .market-card-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+  .market-card-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .market-card-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .change-up   { color: #2d6a4f; }
+  .change-down { color: var(--accent); }
+
+  .markets-chart-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .chart-panel {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .chart-panel-header {
+    background: var(--paper-2);
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .chart-panel-body { padding: 16px; position: relative; height: 260px; }
+
+  .oil-highlight {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 32px;
+  }
+  .oil-alert {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c1010 100%);
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    color: #fff;
+  }
+  .oil-alert-main { flex: 1; }
+  .oil-alert-main .oa-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .oil-alert-main .oa-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 40px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .oil-alert-main .oa-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: #e74c3c;
+  }
+  .oil-alert-context {
+    max-width: 360px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding-left: 24px;
+  }
+  .oil-alert-context strong { color: rgba(255,255,255,0.9); }
+  .oil-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 130px;
+  }
+  .oil-ticker {
+    text-align: center;
+  }
+  .oil-ticker .ot-label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2px;
+  }
+  .oil-ticker .ot-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+  }
+  .oil-ticker .ot-change {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #e8c07e;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    padding: 28px 40px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    margin-top: 60px;
+    line-height: 1.8;
+  }
+  footer .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+  }
+  footer strong { color: rgba(255,255,255,0.7); }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 900px) {
+    .article-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .markets-grid { grid-template-columns: repeat(2,1fr); }
+    .markets-chart-section { grid-template-columns: 1fr; }
+    .intel-grid { grid-template-columns: 1fr; }
+    .oil-alert { flex-direction: column; }
+    .oil-alert-context { border-left: none; border-top: 1px solid rgba(255,255,255,.15); padding: 16px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header>
+  <div class="masthead">
+    <div class="masthead-inner">
+      <div class="masthead-logo">
+        <div class="masthead-title">Global <span>Pulse</span></div>
+        <div class="masthead-tagline">Supply-Chain &amp; Market Intelligence</div>
+      </div>
+      <div class="masthead-meta">
+        <strong>Monday 16 March 2026</strong>
+        Intelligence Edition &nbsp;·&nbsp; Vol. XII No. 11
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKING BANNER -->
+  <div class="breaking-banner">
+    <div class="breaking-banner-inner">
+      <span class="breaking-tag">Breaking</span>
+      <span class="breaking-text"><strong>Iran–China passage talks confirmed:</strong> Beijing pressing Tehran to allow crude and LNG vessels safe Hormuz transit &nbsp;·&nbsp; Yuan payment condition under active consideration &nbsp;·&nbsp; Brent $104.69 ▲ 0.77%</span>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <nav class="nav-strip">
+    <div class="nav-inner">
+      <div class="nav-tab active" onclick="switchTab('article', this)">Intelligence Brief</div>
+      <div class="nav-tab" onclick="switchTab('markets', this)">Markets</div>
+      <div class="nav-tab" onclick="switchTab('risk', this)">Risk Dashboard</div>
+      <div class="nav-tab" onclick="switchTab('sources', this)">Sources</div>
+    </div>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════ ARTICLE TAB ══════════════════════════════════ -->
+<div id="tab-article" class="page-content active">
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN COLUMN -->
+      <main>
+        <div class="article-header">
+          <div class="article-kicker">Hormuz Crisis — Operational Update</div>
+          <h1 class="article-headline">Iran's selective passage and the Yuan gambit: what the intelligence actually shows</h1>
+          <p class="article-subhead">As commercial transit collapses to near-zero, Tehran is differentiating between allies and adversaries — and proposing to restructure the petrodollar system in the process</p>
+          <div class="article-byline">
+            <span>Global Pulse Intelligence Desk</span>
+            <span class="byline-sep">|</span>
+            <span>16 March 2026, 06:00 GMT</span>
+            <span class="byline-sep">|</span>
+            <span>Updated: 09:30 GMT</span>
+          </div>
+        </div>
+
+        <div class="correction-box">
+          <div class="correction-label">Correction &amp; Update</div>
+          <p>A previous version of this brief incorrectly stated that Iran's proposed alternative settlement currency was the Japanese Yen. All verified sources confirm the currency is the <strong>Chinese Yuan (renminbi)</strong>. The article has been corrected and re-fact-checked against live reporting as of 09:30 GMT. Updated information on India's passage arrangements and the status of the Yuan proposal has been incorporated throughout.</p>
+        </div>
+
+        <div class="article-body">
+
+          <p>The Strait of Hormuz — 21 miles wide at its narrowest point and the conduit for roughly 20% of globally traded oil — has not been militarily "closed" in the formal sense. What has happened is arguably more strategically consequential: it has been <em>selectively opened</em>, with access determined by geopolitical alignment rather than commercial right. The distinction matters enormously for manufacturers, insurers, and governments attempting to plan around this crisis.</p>
+
+          <h2>The intelligence divide: posturing versus kinetic reality</h2>
+
+          <!-- INTEL DIVIDE INFOGRAPHIC -->
+          <div class="infographic">
+            <div class="infographic-header">
+              Intelligence assessment comparison — Strait of Hormuz
+              <span class="stamp">As of 16 March 2026</span>
+            </div>
+            <div class="infographic-body">
+              <div class="intel-grid">
+                <div class="intel-card">
+                  <span class="intel-card-badge badge-blue">Five Eyes / JCOIC</span>
+                  <h4>Posturing assessment</h4>
+                  <p>Iran uses Hormuz as a bargaining chip. Full closure would alienate China — its last superpower relationship — and trigger economic collapse.</p>
+                  <div class="intel-card-facts">
+                    <div class="fact-label">Key assumptions</div>
+                    <ul>
+                      <li>Iran remains economically rational</li>
+                      <li>China dependence is a binding constraint</li>
+                      <li>Mojtaba Khamenei continues prior strategy</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="intel-card">
+                  <span class="intel-card-badge badge-red">Regional / maritime intelligence</span>
+                  <h4>Kinetic reality assessment</h4>
+                  <p>Physical evidence of asymmetric warfare already underway. New Supreme Leader signals existential, not economic, strategic framework.</p>
+                  <div class="intel-card-facts">
+                    <div class="fact-label">Verified physical evidence</div>
+                    <ul>
+                      <li>16 minelayers destroyed by US forces (10 Mar)</li>
+                      <li>10 vessels attacked — 7 seafarers killed (IMO)</li>
+                      <li>Commercial transit near zero vs 24/day normal</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="transit-stat">
+                <div class="transit-label">Transit data</div>
+                <div class="transit-value">
+                  <strong>~2 outbound crossings recorded — 12 March 2026 (vs. 24/day normal)</strong>
+                  <span>Suppression rate approaching 100% for Western-flagged commercial vessels. Chinese and Iranian-linked vessels continue selective transits.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p>The Five Eyes alliance, coordinating through the Joint Crisis Operations Intelligence Center, maintains that Iran's threat posture remains fundamentally economic. The core premise — the "Economic Rationalism" thesis — holds that Iran cannot afford to fully close the Strait because China, its only remaining major superpower patron, depends on Gulf oil transiting that corridor. The new Supreme Leader Mojtaba Khamenei has pledged to maintain the closure "as long as the US-Israeli war against Iran continues" — though he added that "the matter may change according to interests," language that Western analysts characterise as preserving an exit ramp. [<a href="https://www.cnbc.com/2026/03/13/oil-100-price-brent-wti-trump-iran-war-surrender-khamenei.html" target="_blank">CNBC</a>]</p>
+
+          <p>Regional analysts and private maritime security firms contest this view directly. US forces have sunk 16 Iranian minelayers as reports indicate Tehran was mining the waterway. Ten vessels in or near the Strait came under Iranian attack within the first two weeks of the war, killing at least seven seafarers, according to the International Maritime Organization. These are not the actions of a government engaged purely in theatrical posturing.</p>
+
+          <div class="pull-quote">
+            <p>"Get ready for oil to be $200 a barrel, because the oil price depends on regional security, which you have destabilised."</p>
+            <cite>Ebrahim Zolfaqari, spokesperson for Iran's militia forces — quoted by CNBC, 13 March 2026</cite>
+          </div>
+
+          <h2>Selective passage: China and India</h2>
+
+          <p>The picture emerging from verified reporting is more granular — and more strategically deliberate — than a simple open/closed binary. Iran has sent at least 11.7 million barrels of crude oil through the Strait since the war began on 28 February, all destined for China. [<a href="https://www.cnbc.com/2026/03/11/iran-ships-oil-china-strait-hormuz-closure-.html" target="_blank">CNBC</a>] China is simultaneously in active talks with Iran to allow crude and Qatari LNG vessels safe passage, with three diplomatic sources confirming to Reuters that Beijing is pressing Tehran to formally extend this arrangement. [<a href="https://www.jpost.com/middle-east/iran-news/article-889028" target="_blank">Jerusalem Post / Reuters</a>]</p>
+
+          <p>Iran's government has stated that no vessels belonging to the United States, Israel, European countries, or their allies would be allowed to pass — but the statement made no mention of China. Ship-tracking data has confirmed a vessel called the Iron Maiden passed through the Strait after changing its signalling to "China-owner." [<a href="https://www.jpost.com/middle-east/iran-news/article-889028" target="_blank">Jerusalem Post</a>]</p>
+
+          <p>India has also secured limited bilateral access. Iran's Ambassador to India confirmed that Tehran had allowed some Indian vessels to pass following diplomatic engagement between New Delhi and Tehran. Two Indian-flagged LPG tankers bound for ports on India's west coast crossed the Strait safely. [<a href="https://www.aljazeera.com/news/2026/3/14/two-indian-ships-cross-strait-of-hormuz-as-iran-says-it-allowed-passage" target="_blank">Al Jazeera</a>] However, 22 Indian-flagged vessels remain west of the waterway, indicating the exemption is selective, not blanket.</p>
+
+          <h2>The Yuan proposal: confirmed, contested, and consequential</h2>
+
+          <p>A senior Iranian official told CNN that Tehran is considering allowing a limited number of oil tankers to pass through the Strait on the condition that their cargo is priced in Chinese Yuan. The potential move is described as part of a plan to manage a controlled reopening of the waterway. [<a href="https://iranwire.com/en/news/150437-cnn-iran-may-allow-tankers-through-hormuz-only-in-chinese-currency/" target="_blank">IranWire / CNN</a>]</p>
+
+          <p>This proposal remains at the consideration stage, not a concluded agreement. Observers in China have reacted cautiously, citing operational feasibility concerns and warning that implementation could strain China–US relations. [<a href="https://www.scmp.com/economy/china-economy/article/3346617/does-iran-have-yuan-hormuz-oil-trade-plan-why-analysts-china-are-urging-caution" target="_blank">South China Morning Post</a>]</p>
+
+          <p>The financial implications deserve more analytical attention than they have received in mainstream coverage. If implemented, Iran's proposal would extend Yuan settlement to the world's single most critical maritime chokepoint — a direct challenge to the petrodollar system that has governed global energy trade since 1974. Countries importing oil through Hormuz would need Yuan reserves, not just dollar reserves, quietly shifting global demand from dollar to Yuan without any dramatic formal announcement. China's CIPS payment system has expanded significantly and Yuan-denominated oil trades already occur with Russian and Iranian crude, meaning the infrastructure to execute such an arrangement already exists. [<a href="https://europeanbusinessmagazine.com/business/iran-has-just-fired-the-most-dangerous-shot-of-this-war-and-it-wasnt-a-missile/" target="_blank">European Business Magazine</a>]</p>
+
+          <!-- CLAIM STATUS TABLE -->
+          <div class="infographic">
+            <div class="infographic-header">
+              Claim verification status — 16 March 2026
+              <span class="stamp">Fact-checked against live reporting</span>
+            </div>
+            <div class="infographic-body" style="padding:0;">
+              <table class="claim-table">
+                <thead>
+                  <tr>
+                    <th style="width:38%">Claim</th>
+                    <th style="width:18%">Status</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Iran allowing Chinese vessels selective passage</td>
+                    <td><span class="status-confirmed">Confirmed</span></td>
+                    <td><a href="https://www.jpost.com/middle-east/iran-news/article-889028" target="_blank">Reuters / Jerusalem Post</a>, <a href="https://www.cnbc.com/2026/03/11/iran-ships-oil-china-strait-hormuz-closure-.html" target="_blank">CNBC</a></td>
+                  </tr>
+                  <tr>
+                    <td>Iran allowing Indian vessels selective passage</td>
+                    <td><span class="status-confirmed">Confirmed</span></td>
+                    <td><a href="https://www.aljazeera.com/news/2026/3/14/two-indian-ships-cross-strait-of-hormuz-as-iran-says-it-allowed-passage" target="_blank">Al Jazeera</a></td>
+                  </tr>
+                  <tr>
+                    <td>Yuan payment condition for Hormuz passage</td>
+                    <td><span class="status-pending">Under consideration</span></td>
+                    <td><a href="https://iranwire.com/en/news/150437-cnn-iran-may-allow-tankers-through-hormuz-only-in-chinese-currency/" target="_blank">IranWire / CNN</a>, <a href="https://www.scmp.com/economy/china-economy/article/3346617/does-iran-have-yuan-hormuz-oil-trade-plan-why-analysts-china-are-urging-caution" target="_blank">SCMP</a></td>
+                  </tr>
+                  <tr>
+                    <td>China–Iran formal signed passage agreement</td>
+                    <td><span class="status-contested">Unverified</span></td>
+                    <td>Russian-affiliated source only — treat with caution</td>
+                  </tr>
+                  <tr>
+                    <td>Iran total Hormuz closure</td>
+                    <td><span class="status-pending">Disputed</span></td>
+                    <td><a href="https://www.aljazeera.com/news/2026/3/14/trump-says-many-countries-will-send-warships-to-hormuz-amid-iran-blockade" target="_blank">Al Jazeera</a> — IRGC: "under control, not closed"</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <h2>The Hormuz-Zero contingency: a three-phase response</h2>
+
+          <p>Given the verified near-total collapse of commercial transit and the uncertainty surrounding both selective passage arrangements and the Yuan proposal, supply-chain planning must now operate on the assumption that the "posturing" thesis is incorrect. The following framework structures the required response across three time horizons.</p>
+
+          <!-- PHASE TIMELINE -->
+          <div class="infographic">
+            <div class="infographic-header">
+              Hormuz-Zero response protocol — phased timeline
+              <span class="stamp">Operational framework</span>
+            </div>
+            <div class="infographic-body">
+              <div class="phase-row">
+                <div class="phase-num phase-num-1">1</div>
+                <div class="phase-card">
+                  <div class="phase-card-header">
+                    <h4>Logistics &amp; inventory</h4>
+                    <span class="phase-tag phase-tag-1">Days 0–7</span>
+                  </div>
+                  <ul class="phase-items phase-items-1">
+                    <li>Air-bridge line-stopper components (semiconductors, sensors) immediately — bypass Cape of Good Hope delay</li>
+                    <li>Increase APAC Tier 1 safety stock from 14 to 45 days of cover</li>
+                    <li>Treat dark-fleet Strait transits as high-risk — exclude from production planning</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="phase-row">
+                <div class="phase-num phase-num-2">2</div>
+                <div class="phase-card">
+                  <div class="phase-card-header">
+                    <h4>Financial &amp; contractual</h4>
+                    <span class="phase-tag phase-tag-2">Days 8–21</span>
+                  </div>
+                  <ul class="phase-items phase-items-2">
+                    <li>Forward-buy plastics, resins, synthetic rubbers — Brent testing $110–$120 in total closure scenario</li>
+                    <li>Rapid solvency audit of Tier 2/3 suppliers in India and Thailand most exposed to LNG energy shock</li>
+                    <li>Begin modelling Yuan/USD exposure in energy procurement cost base</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="phase-row">
+                <div class="phase-num phase-num-3">3</div>
+                <div class="phase-card">
+                  <div class="phase-card-header">
+                    <h4>Geographic diversification</h4>
+                    <span class="phase-tag phase-tag-3">Day 21+</span>
+                  </div>
+                  <ul class="phase-items phase-items-3">
+                    <li>Pivot steel and heavy castings procurement to European or North American sources</li>
+                    <li>Accelerate onsite solar and battery storage at Asian production facilities</li>
+                    <li>Decouple from national grids reliant on Middle Eastern LNG imports</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2>Revised strategic assessment</h2>
+
+          <p>The Hormuz crisis is no longer primarily a physical infrastructure problem with financial consequences. It has become a geopolitical restructuring event, in which the architecture of global energy trade — its routes, its currencies, and its bilateral arrangements — is being redrawn under pressure. Manufacturers who plan for a return to the pre-crisis status quo are likely planning for a world that no longer exists.</p>
+
+          <p>For manufacturers operating outside Chinese and Indian bilateral corridors, the shipping risk remains High with no near-term multilateral resolution in view. Trump's appeal to France, Japan, South Korea, and the United Kingdom to send warships to keep the Strait open has produced no firm commitments. The currency dimension is the most structurally novel element: even at the consideration stage, the Yuan proposal signals that Iran intends to use the Strait as a financial restructuring instrument. Procurement and treasury teams should begin modelling Yuan exposure in energy cost bases now, regardless of whether the proposal is formalised.</p>
+
+        </div>
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+
+        <div class="sidebar-widget">
+          <div class="sidebar-widget-header">Risk summary</div>
+          <div class="sidebar-widget-body">
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-high"></span>
+              <span class="sidebar-risk-label">Shipping &amp; logistics</span>
+              <span style="font-size:10px;color:#7a1f1f;font-weight:500;">HIGH</span>
+            </div>
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-high"></span>
+              <span class="sidebar-risk-label">Energy costs</span>
+              <span style="font-size:10px;color:#7a1f1f;font-weight:500;">HIGH</span>
+            </div>
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-medium"></span>
+              <span class="sidebar-risk-label">Rare earths &amp; magnets</span>
+              <span style="font-size:10px;color:#634010;font-weight:500;">MED</span>
+            </div>
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-medium"></span>
+              <span class="sidebar-risk-label">Battery materials</span>
+              <span style="font-size:10px;color:#634010;font-weight:500;">MED</span>
+            </div>
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-medium"></span>
+              <span class="sidebar-risk-label">Semiconductors</span>
+              <span style="font-size:10px;color:#634010;font-weight:500;">MED</span>
+            </div>
+            <div class="sidebar-risk-item">
+              <span class="sidebar-risk-dot dot-medium"></span>
+              <span class="sidebar-risk-label">Sanctions / export controls</span>
+              <span style="font-size:10px;color:#634010;font-weight:500;">MED</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="sidebar-widget-header">Oil snapshot</div>
+          <div class="sidebar-widget-body">
+            <div style="display:flex;gap:12px;margin-bottom:12px;">
+              <div style="flex:1;text-align:center;padding:10px 8px;background:var(--paper-2);border-radius:4px;border:1px solid var(--rule);">
+                <div style="font-size:10px;color:var(--ink-4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">Brent</div>
+                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--ink);">$104.69</div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;color:#2d6a4f;">▲ +0.77%</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:10px 8px;background:var(--paper-2);border-radius:4px;border:1px solid var(--rule);">
+                <div style="font-size:10px;color:var(--ink-4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">WTI</div>
+                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--ink);">$97.79</div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;color:#2d6a4f;">▲ +0.19%</div>
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--ink-4);line-height:1.5;">As of 05:06 GMT, 16 March 2026. Both benchmarks trading above $100 for a second consecutive week amid Hormuz disruption.</div>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="sidebar-widget-header">Next week watchlist</div>
+          <div class="sidebar-widget-body">
+            <div class="watchlist-item"><span class="watch-bullet">›</span>Hormuz tanker attacks — escalation or pause</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>Brent price action above $110</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>China–Iran passage formalisation</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>Yuan oil trade proposal — official confirmation</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>Semiconductor export control updates</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>China rare-earth export policy signals</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>EU sanctions updates</div>
+            <div class="watchlist-item"><span class="watch-bullet">›</span>Tanker insurance premium movements</div>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="sidebar-widget-header">Next month scenarios</div>
+          <div class="sidebar-widget-body">
+            <div style="padding:8px 0;border-bottom:1px solid var(--rule);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:11px;font-weight:500;color:var(--ink);">Energy volatility continues</span>
+                <span style="margin-left:auto;background:#fde8e8;color:#7a1f1f;font-size:10px;padding:1px 7px;border-radius:2px;">High</span>
+              </div>
+              <div style="font-size:11px;color:var(--ink-3);">Oil anchored above $100. Sustained cost inflation.</div>
+            </div>
+            <div style="padding:8px 0;border-bottom:1px solid var(--rule);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:11px;font-weight:500;color:var(--ink);">Shipping stabilisation</span>
+                <span style="margin-left:auto;background:#fdf0dc;color:#634010;font-size:10px;padding:1px 7px;border-radius:2px;">Medium</span>
+              </div>
+              <div style="font-size:11px;color:var(--ink-3);">Naval escorts restore partial tanker traffic.</div>
+            </div>
+            <div style="padding:8px 0;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-size:11px;font-weight:500;color:var(--ink);">Escalation — oil above $140</span>
+                <span style="margin-left:auto;background:#eaf3e0;color:#27500a;font-size:10px;padding:1px 7px;border-radius:2px;">Low</span>
+              </div>
+              <div style="font-size:11px;color:var(--ink-3);">Hormuz closure triggers historic supply shock.</div>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ MARKETS TAB ══════════════════════════════════ -->
+<div id="tab-markets" class="page-content">
+
+  <div class="markets-header">
+    <h1>Markets</h1>
+    <p><span class="live-dot"></span>Live data as of <strong>16 March 2026, 06:00 GMT</strong> — Prices reflect latest available figures. All equities show prior Friday closing prices.</p>
+  </div>
+
+  <!-- OIL HIGHLIGHT -->
+  <div class="oil-highlight" style="padding-top:28px;">
+    <div class="oil-alert">
+      <div class="oil-alert-main">
+        <div class="oa-label">Brent crude — front month</div>
+        <div class="oa-value">$104.69</div>
+        <div class="oa-change">▲ +$0.81 &nbsp;(+0.77%) today &nbsp;·&nbsp; Week: +8.00%</div>
+      </div>
+      <div class="oil-pair">
+        <div class="oil-ticker">
+          <div class="ot-label">WTI</div>
+          <div class="ot-value">$97.79</div>
+          <div class="ot-change">▲ +0.19%</div>
+        </div>
+        <div class="oil-ticker">
+          <div class="ot-label">Brent–WTI Spread</div>
+          <div class="ot-value">$6.90</div>
+          <div class="ot-change" style="color:rgba(255,255,255,0.4);">Normal range $2–$5</div>
+        </div>
+      </div>
+      <div class="oil-alert-context">
+        Oil is trading above $100 for a second consecutive week as the Strait of Hormuz remains effectively closed to Western-flagged commercial vessels. Goldman Sachs has revised its average Brent forecast above $100/bbl. The 52-week range spans <strong>$58.40 to $119.50</strong>. Iran's militia has warned of <strong>$200/bbl</strong> if the war escalates further.
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKET CARDS -->
+  <div class="markets-grid">
+    <div class="market-card">
+      <div class="market-card-label">Nikkei 225</div>
+      <div class="market-card-value">55,621</div>
+      <div class="market-card-change change-down">▼ −5.49% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">FTSE 100</div>
+      <div class="market-card-value">10,414</div>
+      <div class="market-card-change change-down">▼ −1.45% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">CAC 40</div>
+      <div class="market-card-value">8,046</div>
+      <div class="market-card-change change-down">▼ −1.49% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">S&amp;P 500</div>
+      <div class="market-card-value">6,632</div>
+      <div class="market-card-change change-down">▼ −1.60% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">DJIA</div>
+      <div class="market-card-value">46,558</div>
+      <div class="market-card-change change-down">▼ −2.00% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">Nasdaq</div>
+      <div class="market-card-value">22,105</div>
+      <div class="market-card-change change-down">▼ −1.30% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">Brent Crude</div>
+      <div class="market-card-value">$104.69</div>
+      <div class="market-card-change change-up">▲ +8.00% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">WTI Crude</div>
+      <div class="market-card-value">$97.79</div>
+      <div class="market-card-change change-up">▲ +3.10% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">DXY</div>
+      <div class="market-card-value">105.00</div>
+      <div class="market-card-change change-up">▲ +0.50% wk</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-label">USD / CNY</div>
+      <div class="market-card-value">7.2100</div>
+      <div class="market-card-change change-up">▲ +0.40% wk</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="markets-chart-section">
+    <div class="chart-panel">
+      <div class="chart-panel-header">Weekly equity index performance (%)</div>
+      <div class="chart-panel-body">
+        <canvas id="equityChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-panel">
+      <div class="chart-panel-header">Energy &amp; currency weekly change (%)</div>
+      <div class="chart-panel-body">
+        <canvas id="commodityChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════ RISK TAB ══════════════════════════════════ -->
+<div id="tab-risk" class="page-content">
+  <div class="container" style="max-width:860px;">
+    <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--ink);">
+      <div class="article-kicker">Supply-chain risk</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;margin-bottom:6px;">Risk dashboard — week of 14 March 2026</h1>
+      <p style="font-size:13px;color:var(--ink-3);">Six supply-chain risk categories assessed for manufacturers with APAC-origin sourcing and Gulf-routed logistics.</p>
+    </div>
+
+    <div class="infographic">
+      <div class="infographic-header">Risk register <span class="stamp">Updated 14 March 2026</span></div>
+      <div class="infographic-body" style="padding:8px 18px;">
+        <div class="risk-row">
+          <span class="risk-badge risk-high">High</span>
+          <div class="risk-info">
+            <h4>Shipping &amp; logistics</h4>
+            <p>Tanker rerouting and rising insurance premiums. Gulf security risk disrupting route planning and freight timelines. Commercial transit at near-zero through Hormuz.</p>
+          </div>
+          <div class="risk-indicator">Further attacks / naval escorts</div>
+        </div>
+        <div class="risk-row">
+          <span class="risk-badge risk-high">High</span>
+          <div class="risk-info">
+            <h4>Energy costs</h4>
+            <p>Oil above $100 raising costs across transport, plastics, petrochemical feedstocks, and manufacturing inputs. Goldman Sachs raised average Brent forecast above $100.</p>
+          </div>
+          <div class="risk-indicator">Price move above $110</div>
+        </div>
+        <div class="risk-row">
+          <span class="risk-badge risk-medium">Medium</span>
+          <div class="risk-info">
+            <h4>Rare earths &amp; magnets</h4>
+            <p>China dominates NdFeB magnet processing used in EV motors. Any China–West trade escalation could disrupt this supply chain.</p>
+          </div>
+          <div class="risk-indicator">Export quota / licensing</div>
+        </div>
+        <div class="risk-row">
+          <span class="risk-badge risk-medium">Medium</span>
+          <div class="risk-info">
+            <h4>Battery materials</h4>
+            <p>Lithium, nickel, and graphite markets stable but vulnerable to energy price shocks affecting mining and refining costs.</p>
+          </div>
+          <div class="risk-indicator">Refinery outages / export bans</div>
+        </div>
+        <div class="risk-row">
+          <span class="risk-badge risk-medium">Medium</span>
+          <div class="risk-info">
+            <h4>Semiconductors</h4>
+            <p>US–China export controls continue to restrict advanced chip supply for automotive electronics and vehicle systems.</p>
+          </div>
+          <div class="risk-indicator">New licensing rules</div>
+        </div>
+        <div class="risk-row">
+          <span class="risk-badge risk-medium">Medium</span>
+          <div class="risk-info">
+            <h4>Sanctions &amp; export controls</h4>
+            <p>Technology export controls remain a persistent compliance risk across automotive electronics supply chains.</p>
+          </div>
+          <div class="risk-indicator">EU sanctions updates</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:16px;padding-top:20px;border-top:1px solid var(--rule);">Forward scenarios — next 30 days</h2>
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:2fr 1fr 3fr;background:var(--paper-2);padding:10px 16px;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-4);border-bottom:1px solid var(--rule);">
+          <span>Scenario</span><span>Probability</span><span>Key implication</span>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 3fr;padding:14px 16px;border-bottom:1px solid var(--rule);background:#fff;align-items:center;">
+          <div><div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;">Continued energy volatility</div><div style="font-size:11px;color:var(--ink-3);">Oil above $100; logistics disruption persists</div></div>
+          <div><span class="risk-badge risk-high" style="display:inline-block;">High</span></div>
+          <div style="font-size:12px;color:var(--ink-3);">Sustained cost inflation. Inventory buffers become critical across all tiers.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 3fr;padding:14px 16px;border-bottom:1px solid var(--rule);background:var(--paper-2);align-items:center;">
+          <div><div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;">Shipping stabilisation</div><div style="font-size:11px;color:var(--ink-3);">Naval escorts restore partial tanker traffic</div></div>
+          <div><span class="risk-badge risk-medium" style="display:inline-block;">Medium</span></div>
+          <div style="font-size:12px;color:var(--ink-3);">Freight timelines partially normalise. Energy prices remain elevated.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 3fr;padding:14px 16px;background:#fff;align-items:center;">
+          <div><div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;">Escalation — oil above $140</div><div style="font-size:11px;color:var(--ink-3);">Hormuz closure triggers historic supply shock</div></div>
+          <div><span class="risk-badge risk-low" style="display:inline-block;">Low</span></div>
+          <div style="font-size:12px;color:var(--ink-3);">Severe production cost shocks. Emergency rerouting and potential output curtailments.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ SOURCES TAB ══════════════════════════════════ -->
+<div id="tab-sources" class="page-content">
+  <div class="container" style="max-width:860px;">
+    <div style="margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--ink);">
+      <div class="article-kicker">Transparency &amp; methodology</div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:30px;font-weight:700;margin-bottom:6px;">Sources &amp; source notes</h1>
+      <p style="font-size:13px;color:var(--ink-3);">All claims in this edition have been checked against the following sources. State-affiliated media is identified as such. Contested claims are flagged. This report draws on Western wire services, regional Middle East reporting, East Asian media, and Global South financial press.</p>
+    </div>
+    <ul class="sources-list">
+      <li><span class="source-num">01</span><span>Reuters / Jerusalem Post — China–Iran passage talks confirmed by three diplomatic sources. <a href="https://www.jpost.com/middle-east/iran-news/article-889028" target="_blank">jpost.com</a></span></li>
+      <li><span class="source-num">02</span><span>CNBC — Iran shipping 11.7m barrels to China since war began; oil above $100 for second session. <a href="https://www.cnbc.com/2026/03/11/iran-ships-oil-china-strait-hormuz-closure-.html" target="_blank">cnbc.com</a></span></li>
+      <li><span class="source-num">03</span><span>CNBC — Brent and WTI close above $100; Iran new Supreme Leader vows to continue fighting. <a href="https://www.cnbc.com/2026/03/13/oil-100-price-brent-wti-trump-iran-war-surrender-khamenei.html" target="_blank">cnbc.com</a></span></li>
+      <li><span class="source-num">04</span><span>Al Jazeera — Two Indian LPG tankers cross Strait; Iran confirms selective passage for India. <a href="https://www.aljazeera.com/news/2026/3/14/two-indian-ships-cross-strait-of-hormuz-as-iran-says-it-allowed-passage" target="_blank">aljazeera.com</a></span></li>
+      <li><span class="source-num">05</span><span>Al Jazeera — Trump warship appeal; IRGC Navy: "Strait under control, not militarily closed." <a href="https://www.aljazeera.com/news/2026/3/14/trump-says-many-countries-will-send-warships-to-hormuz-amid-iran-blockade" target="_blank">aljazeera.com</a></span></li>
+      <li><span class="source-num">06</span><span>Fortune / AP — Iran Foreign Minister confirms some countries granted Hormuz access. <a href="https://fortune.com/2026/03/15/iran-some-countries-access-strait-of-hormuz-trump-warships-no-promises/" target="_blank">fortune.com</a></span></li>
+      <li><span class="source-num">07</span><span>IranWire / CNN — Iran considering Yuan-only condition for Hormuz tanker passage. <a href="https://iranwire.com/en/news/150437-cnn-iran-may-allow-tankers-through-hormuz-only-in-chinese-currency/" target="_blank">iranwire.com</a></span></li>
+      <li><span class="source-num">08</span><span>South China Morning Post — Chinese analysts urge caution on Yuan oil plan; feasibility and US-China tensions cited. <a href="https://www.scmp.com/economy/china-economy/article/3346617/does-iran-have-yuan-hormuz-oil-trade-plan-why-analysts-china-are-urging-caution" target="_blank">scmp.com</a></span></li>
+      <li><span class="source-num">09</span><span>European Business Magazine — Petrodollar system analysis; Yuan settlement infrastructure. <a href="https://europeanbusinessmagazine.com/business/iran-has-just-fired-the-most-dangerous-shot-of-this-war-and-it-wasnt-a-missile/" target="_blank">europeanbusinessmagazine.com</a></span></li>
+      <li><span class="source-num">10</span><span>Reuters — Goldman Sachs raises Brent forecast above $100 average for 2026. <a href="https://www.reuters.com/business/energy/goldman-hikes-average-brent-oil-forecast-over-100-barrel-march-2026-03-13/" target="_blank">reuters.com</a></span></li>
+      <li><span class="source-num">11</span><span>Reuters — Tanker rerouting amid Hormuz security risks confirmed. <a href="https://www.reuters.com/business/energy/tankers-reroute-amid-hormuz-security-risks-2026-03-14/" target="_blank">reuters.com</a></span></li>
+      <li><span class="source-num">12</span><span>OilPrice API — Live energy market data: Brent $104.69, WTI $97.79, as of 05:06 GMT 16 March 2026. <a href="https://www.oilpriceapi.com/live/oil-market-status" target="_blank">oilpriceapi.com</a></span></li>
+      <li><span class="source-num">13</span><span>The Hindu — Oil price volatility: impact on manufacturing inputs and EV production costs. <a href="https://www.thehindu.com/business/Economy/oil-price-volatility-middle-east-conflict/article68005010.ece" target="_blank">thehindu.com</a></span></li>
+      <li><span class="source-num">14</span><span>Xinhua — Rare-earth and NdFeB magnet supply chain sensitivity. (State media — read with appropriate context.) <a href="https://english.news.cn/20260306/a90fff896df544c2a31718930d1b59d9/c.html" target="_blank">xinhua.net</a></span></li>
+      <li><span class="source-num">15</span><span>Wikipedia — 2026 Strait of Hormuz crisis: background, transit data, chronology. <a href="https://en.wikipedia.org/wiki/2026_Strait_of_Hormuz_crisis" target="_blank">wikipedia.org</a></span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <strong>Global Pulse</strong><br>
+      Supply-Chain &amp; Market Intelligence Edition<br>
+      Volume XII · Number 11 · 16 March 2026
+    </div>
+    <div style="max-width:420px;text-align:right;">
+      This publication is prepared for analytical and informational purposes. All contested claims are identified as such. State-affiliated media sources are noted. Market data is indicative only and should not be used as a basis for trading decisions. &copy; 2026 Global Pulse.
+    </div>
+  </div>
+</footer>
+
+<script>
+  function switchTab(name, el) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    el.classList.add('active');
+    if (name === 'markets' && !window.chartsBuilt) buildCharts();
+  }
+
+  function buildCharts() {
+    window.chartsBuilt = true;
+
+    new Chart(document.getElementById('equityChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Nikkei 225', 'FTSE 100', 'CAC 40', 'S&P 500', 'DJIA', 'Nasdaq'],
+        datasets: [{
+          data: [-5.49, -1.45, -1.49, -1.60, -2.00, -1.30],
+          backgroundColor: '#c0392b',
+          borderRadius: 3,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: ctx => (ctx.raw > 0 ? '+' : '') + ctx.raw.toFixed(2) + '%' } }
+        },
+        scales: {
+          x: { ticks: { font: { size: 11 }, color: '#6b6b6b' }, grid: { display: false } },
+          y: { ticks: { callback: v => v.toFixed(1) + '%', font: { size: 11 }, color: '#6b6b6b' }, grid: { color: 'rgba(0,0,0,0.06)' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('commodityChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Brent Crude', 'WTI Crude', 'DXY', 'USD/CNY'],
+        datasets: [{
+          data: [8.00, 3.10, 0.50, 0.40],
+          backgroundColor: ['#c0392b','#e74c3c','#1a3a5c','#2d6a4f'],
+          borderRadius: 3,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '+' + ctx.raw.toFixed(2) + '%' } }
+        },
+        scales: {
+          x: { ticks: { font: { size: 11 }, color: '#6b6b6b' }, grid: { display: false } },
+          y: { ticks: { callback: v => '+' + v.toFixed(1) + '%', font: { size: 11 }, color: '#6b6b6b' }, grid: { color: 'rgba(0,0,0,0.06)' } }
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
